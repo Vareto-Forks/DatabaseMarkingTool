@@ -5,6 +5,7 @@ import numpy as np
 
 import math
 
+
 def enum(**enums):
     return type('Enum', (), enums)
 
@@ -16,6 +17,8 @@ class ObjectInformation:
         self.centre = (0, 0)
         self.width = 0
         self.height = 0
+
+        self.selected = False
 
         self.point_1 = (0, 0)
         self.point_2 = (0, 0)
@@ -102,15 +105,54 @@ current_object = None
 
 state = STATE.idle
 
-point_upper_left = (0, 0)
-point_bottom_right = (0, 0)
-
 previous_x = 0
 previous_y = 0
 
+
+class MouseButtonState:
+    def __init__(self):
+        self.previous_x = 0
+        self.previous_y = 0
+        self.flag_pressed = False
+
+    def update_previous_location(self, x, y):
+        self.previous_x = x
+        self.previous_y = y
+
+    def get_previous_location_x(self):
+        return self.previous_x
+
+    def get_previous_location_y(self):
+        return self.previous_y
+
+
+right_button = MouseButtonState()
+new_object = None
+
+
+def right_button_action(event, x, y):
+    global right_button, new_object, objects_to_draw
+
+    if event == cv2.EVENT_RBUTTONDOWN:
+        right_button.flag_pressed = True
+        new_object = ObjectInformation()
+        new_object.init(x, y, x+1, y+1)
+        objects_to_draw.append(new_object)
+    elif event == cv2.EVENT_RBUTTONUP:
+        right_button.flag_pressed = False
+        new_object.finish(x, y)
+    elif event == cv2.EVENT_MOUSEMOVE:
+        new_object.resize(x, y)
+
+
 # mouse callback function
+# left key is used for moving objects
+# right key is used for creating new objects
 def mouse_callback(event, x, y, flags, param):
-    global state, current_object, objects_to_draw, previous_x, previous_y
+    global state, current_object, objects_to_draw, previous_x, previous_y, right_button
+
+    if event == cv2.EVENT_RBUTTONDOWN or event == cv2.EVENT_RBUTTONUP or right_button.flag_pressed:
+        right_button_action(event, x, y)
 
     if state == STATE.idle:
 
@@ -124,6 +166,7 @@ def mouse_callback(event, x, y, flags, param):
 
             if is_clicked_inside:
                 current_object = object_to_draw
+                current_object.selected = True
                 previous_x = x
                 previous_y = y
                 state = STATE.left_clicked_inside
@@ -144,6 +187,7 @@ def mouse_callback(event, x, y, flags, param):
 
     elif state == STATE.left_clicked_inside:
         if event == cv2.EVENT_LBUTTONUP:
+            current_object.selected = False
             state = STATE.idle
 
         elif event == cv2.EVENT_MOUSEMOVE:
@@ -177,7 +221,10 @@ if __name__ == "__main__":
             if object_to_draw.type == "temporary":
                 cv2.rectangle(img_working, object_to_draw.point_1, object_to_draw.point_2, (0, 100, 255), 1)
             else:
-                cv2.rectangle(img_working, object_to_draw.point_1, object_to_draw.point_2, (0, 0, 255), 3)
+                if object_to_draw.selected:
+                    cv2.rectangle(img_working, object_to_draw.point_1, object_to_draw.point_2, (0, 255, 0), 3)
+                else:
+                    cv2.rectangle(img_working, object_to_draw.point_1, object_to_draw.point_2, (0, 0, 255), 3)
         cv2.imshow(window_name, img_working)
         key = cv2.waitKey(20)
 
