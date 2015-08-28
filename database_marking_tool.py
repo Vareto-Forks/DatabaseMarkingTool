@@ -3,7 +3,8 @@ __author__ = 'Amin'
 import cv2
 import numpy as np
 
-import math
+from ObjectInformation import ObjectInformation
+from MouseButton import MouseButton
 
 
 def enum(**enums):
@@ -11,195 +12,108 @@ def enum(**enums):
 
 STATE = enum(idle=0, left_clicked_outside=1, left_clicked_inside=2)
 
+right_button = MouseButton()
+left_button = MouseButton()
 
-class ObjectInformation:
-    def __init__(self):
-        self.centre = (0, 0)
-        self.width = 0
-        self.height = 0
-
-        self.selected = False
-
-        self.point_1 = (0, 0)
-        self.point_2 = (0, 0)
-        self._update_based_on_points()
-
-        self.type = "type"
-        #self.description = "object"
-
-    def init(self, x1, y1, x2, y2):
-        self.point_1 = (x1, y1)
-        self.point_2 = (x2, y2)
-        self.type = "temporary"
-        self._update_based_on_points()
-
-    def resize(self, x2, y2):
-        self.point_2 = (x2, y2)
-        self._update_based_on_points()
-
-    def finish(self, x2, y2):
-        self.point_2 = (x2, y2)
-        self.type = "permanent"
-        self._update_based_on_points()
-
-    def move(self, dx, dy):
-        x_centre = self.centre[0] + dx
-        y_centre = self.centre[1] + dy
-        self.centre = (x_centre, y_centre)
-        self._update_base_on_centre()
-
-    def _update_based_on_points(self):
-        x1 = self.point_1[0]
-        x2 = self.point_2[0]
-        y1 = self.point_1[1]
-        y2 = self.point_2[1]
-
-        self.centre = ((x1 + x2)/2.0, (y1 + y2)/2.0)
-        self.width = abs(x1-x2)
-        self.height = abs(y1-y2)
-
-    def _update_base_on_centre(self):
-        x_centre = self.centre[0]
-        y_centre = self.centre[1]
-        x1 = int(x_centre - math.floor(self.width/2))
-        x2 = int(x_centre + math.floor(self.width/2))
-        y1 = int(y_centre - math.floor(self.height/2))
-        y2 = int(y_centre + math.floor(self.height/2))
-
-        self.point_1 = (x1, y1)
-        self.point_2 = (x2, y2)
-
-    def check_if_inside(self, x, y):
-        x1 = self.point_1[0]
-        x2 = self.point_2[0]
-        y1 = self.point_1[1]
-        y2 = self.point_2[1]
-
-        result_x = False
-
-        if x1 > x2:
-            if x2 <= x <= x1:
-                result_x = True
-        else:
-            if x1 <= x <= x2:
-                result_x = True
-
-        result_y = False
-
-        if y1 > y2:
-            if y2 <= y <= y1:
-                result_y = True
-        else:
-            if y1 <= y <= y2:
-                result_y = True
-
-        result = False
-        if result_x and result_y:
-            result = True
-
-        return result
-
-objects_to_draw = []
-
+new_object = None
 current_object = None
+objects_to_draw = []
 
 state = STATE.idle
 
-previous_x = 0
-previous_y = 0
-
-
-class MouseButtonState:
-    def __init__(self):
-        self.previous_x = 0
-        self.previous_y = 0
-        self.flag_pressed = False
-
-    def update_previous_location(self, x, y):
-        self.previous_x = x
-        self.previous_y = y
-
-    def get_previous_location_x(self):
-        return self.previous_x
-
-    def get_previous_location_y(self):
-        return self.previous_y
-
-
-right_button = MouseButtonState()
-new_object = None
-
-
-def right_button_action(event, x, y):
-    global right_button, new_object, objects_to_draw
-
-    if event == cv2.EVENT_RBUTTONDOWN:
-        right_button.flag_pressed = True
-        new_object = ObjectInformation()
-        new_object.init(x, y, x+1, y+1)
-        objects_to_draw.append(new_object)
-    elif event == cv2.EVENT_RBUTTONUP:
-        right_button.flag_pressed = False
-        new_object.finish(x, y)
-    elif event == cv2.EVENT_MOUSEMOVE:
-        new_object.resize(x, y)
+#previous_x = 0
+#previous_y = 0
 
 
 # mouse callback function
 # left key is used for moving objects
 # right key is used for creating new objects
 def mouse_callback(event, x, y, flags, param):
-    global state, current_object, objects_to_draw, previous_x, previous_y, right_button
+    global current_object, new_object, objects_to_draw, right_button, left_button
+    #global state, previous_x, previous_y
 
-    if event == cv2.EVENT_RBUTTONDOWN or event == cv2.EVENT_RBUTTONUP or right_button.flag_pressed:
-        right_button_action(event, x, y)
+    # right mouse button
+    if event == cv2.EVENT_RBUTTONDOWN:
+        right_button.callback_pressed(x, y)
+        new_object = ObjectInformation()
+        new_object.init(x, y, x+1, y+1)
+        objects_to_draw.append(new_object)
+    elif event == cv2.EVENT_RBUTTONUP:
+        right_button.callback_released(x, y)
+        new_object.finish(x, y)
 
-    if state == STATE.idle:
+    elif event == cv2.EVENT_MOUSEMOVE:
+        if right_button.is_pressed:
+            right_button.callback_moved(x, y)
+            new_object.resize(x, y)
+        if left_button.is_pressed:
+            if current_object is not None and current_object.selected:
+                dx = (x-left_button.get_previous_location_x())
+                dy = (y-left_button.get_previous_location_y())
+                current_object.move(dx, dy)
 
-        if event == cv2.EVENT_LBUTTONDOWN:
+            left_button.callback_moved(x, y)
 
-            is_clicked_inside = False
-            for object_to_draw in objects_to_draw:
-                if object_to_draw.check_if_inside(x, y):
-                    is_clicked_inside = True
-                    break
+    elif event == cv2.EVENT_LBUTTONDOWN:
+        left_button.callback_pressed(x, y)
 
-            if is_clicked_inside:
+        for object_to_draw in objects_to_draw:
+            object_to_draw.unselect()
+
+        for object_to_draw in objects_to_draw:
+            if object_to_draw.check_if_inside(x, y):
                 current_object = object_to_draw
-                current_object.selected = True
-                previous_x = x
-                previous_y = y
-                state = STATE.left_clicked_inside
-            else:
-                current_object = ObjectInformation()
-                current_object.init(x, y, x+1, y+1)
-                objects_to_draw.append(current_object)
-                state = STATE.left_clicked_outside
+                current_object.select(x, y)
+                break
 
-    elif state == STATE.left_clicked_outside:
+    elif event == cv2.EVENT_LBUTTONUP:
+        left_button.callback_released(x, y)
 
-        if event == cv2.EVENT_LBUTTONUP:
-            current_object.finish(x, y)
-            state = STATE.idle
-
-        elif event == cv2.EVENT_MOUSEMOVE:
-            current_object.resize(x, y)
-
-    elif state == STATE.left_clicked_inside:
-        if event == cv2.EVENT_LBUTTONUP:
-            current_object.selected = False
-            state = STATE.idle
-
-        elif event == cv2.EVENT_MOUSEMOVE:
-            dx = (x-previous_x)
-            dy = (y-previous_y)
-            current_object.move(dx, dy)
-            previous_x = x
-            previous_y = y
-
-    else:
-        pass
-
+    # if state == STATE.idle:
+    #
+    #     if event == cv2.EVENT_LBUTTONDOWN:
+    #
+    #         is_clicked_inside = False
+    #         for object_to_draw in objects_to_draw:
+    #             if object_to_draw.check_if_inside(x, y):
+    #                 is_clicked_inside = True
+    #                 break
+    #
+    #         if is_clicked_inside:
+    #             current_object = object_to_draw
+    #             current_object.selected = True
+    #             previous_x = x
+    #             previous_y = y
+    #             state = STATE.left_clicked_inside
+    #         else:
+    #             current_object = ObjectInformation()
+    #             current_object.init(x, y, x+1, y+1)
+    #             objects_to_draw.append(current_object)
+    #             state = STATE.left_clicked_outside
+    #
+    # elif state == STATE.left_clicked_outside:
+    #
+    #     if event == cv2.EVENT_LBUTTONUP:
+    #         current_object.finish(x, y)
+    #         state = STATE.idle
+    #
+    #     elif event == cv2.EVENT_MOUSEMOVE:
+    #         current_object.resize(x, y)
+    #
+    # elif state == STATE.left_clicked_inside:
+    #     if event == cv2.EVENT_LBUTTONUP:
+    #         current_object.selected = False
+    #         state = STATE.idle
+    #
+    #     elif event == cv2.EVENT_MOUSEMOVE:
+    #         dx = (x-previous_x)
+    #         dy = (y-previous_y)
+    #         current_object.move(dx, dy)
+    #         previous_x = x
+    #         previous_y = y
+    #
+    # else:
+    #     pass
 
 if __name__ == "__main__":
 
@@ -215,16 +129,74 @@ if __name__ == "__main__":
 
     key = 0
     while key != 27:
+
+        if current_object is not None:
+            if key == ord('w'):
+                current_object.move(0, -1)
+            elif key == ord('s'):
+                current_object.move(0, 1)
+            elif key == ord('a'):
+                current_object.move(-1, 0)
+            elif key == ord('d'):
+                current_object.move(1, 0)
+            elif key == ord('q'):
+                current_object.increase_size(top=-1)
+            elif key == ord('z'):
+                current_object.increase_size(top=1)
+            elif key == ord('Q'):
+                current_object.increase_size(down=1)
+            elif key == ord('Z'):
+                current_object.increase_size(down=-1)
+            elif key == ord('e'):
+                current_object.increase_size(left=-1)
+            elif key == ord('c'):
+                current_object.increase_size(left=1)
+            elif key == ord('E'):
+                current_object.increase_size(right=1)
+            elif key == ord('C'):
+                current_object.increase_size(right=-1)
+
+            elif key == ord('1'):
+                flag_start_checking = False
+                selected_object = None
+                for object_to_draw in objects_to_draw:
+                    if flag_start_checking:
+                        if object_to_draw.check_if_inside(
+                                selected_object.point_of_selection.x,
+                                selected_object.point_of_selection.y
+                        ):
+                            selected_object.unselect()
+                            current_object = object_to_draw
+                            current_object.select(selected_object.point_of_selection.x, selected_object.point_of_selection.y)
+                            break
+                    if object_to_draw.selected:
+                        flag_start_checking = True
+                        selected_object = object_to_draw
+
+            elif key == ord('2'):
+                objects_to_draw.remove(current_object)
+
+
         img_working = img_original.copy()
         # draw all stored objects
         for object_to_draw in objects_to_draw:
+
+            colour = (100, 100, 100)
+            width = 2
+
             if object_to_draw.type == "temporary":
-                cv2.rectangle(img_working, object_to_draw.point_1, object_to_draw.point_2, (0, 100, 255), 1)
+                colour = (0, 100, 255)
+                width = 1
+
             else:
+                width = 3
                 if object_to_draw.selected:
-                    cv2.rectangle(img_working, object_to_draw.point_1, object_to_draw.point_2, (0, 255, 0), 3)
+                    colour = (0, 255, 0)
                 else:
-                    cv2.rectangle(img_working, object_to_draw.point_1, object_to_draw.point_2, (0, 0, 255), 3)
+                    colour = (0, 0, 255)
+
+            cv2.rectangle(img_working, object_to_draw.point_top_left.to_tuple(), object_to_draw.point_bottom_right.to_tuple(), colour, width)
+
         cv2.imshow(window_name, img_working)
         key = cv2.waitKey(20)
 
