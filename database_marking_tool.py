@@ -125,7 +125,7 @@ if __name__ == "__main__":
     #img = cv2.imread("Desert.jpg", cv2.IMREAD_COLOR)
     img_original = np.zeros((512, 512, 3), np.uint8)
 
-    cv2.rectangle(img_original, (10, 10), (100, 100), (255, 0, 0), 10)
+    font = cv2.FONT_HERSHEY_SIMPLEX
 
     key = 0
     while key != 27:
@@ -176,26 +176,17 @@ if __name__ == "__main__":
             elif key == ord('2'):
                 objects_to_draw.remove(current_object)
 
+            elif key == ord('3'):
+                current_object.change_type_to_person()
+
+            elif key == ord('4'):
+                current_object.change_type_to_car()
+
 
         img_working = img_original.copy()
         # draw all stored objects
         for object_to_draw in objects_to_draw:
-
-            colour = (100, 100, 100)
-            width = 2
-
-            if object_to_draw.type == "temporary":
-                colour = (0, 100, 255)
-                width = 1
-
-            else:
-                width = 3
-                if object_to_draw.selected:
-                    colour = (0, 255, 0)
-                else:
-                    colour = (0, 0, 255)
-
-            cv2.rectangle(img_working, object_to_draw.point_top_left.to_tuple(), object_to_draw.point_bottom_right.to_tuple(), colour, width)
+            object_to_draw.draw(img_working, font)
 
         cv2.imshow(window_name, img_working)
         key = cv2.waitKey(20)

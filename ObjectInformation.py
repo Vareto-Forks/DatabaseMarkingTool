@@ -2,6 +2,8 @@ __author__ = 'Amin'
 
 import math
 
+import cv2
+
 
 class Point:
     def __init__(self):
@@ -30,7 +32,7 @@ class ObjectInformation:
         self._update_based_on_points()
 
         self.type = "type"
-        #self.description = "object"
+        #self.description = "person"
 
     def init(self, x1, y1, x2, y2):
         self.point_top_left.update(x1, y1)
@@ -55,8 +57,14 @@ class ObjectInformation:
 
     def finish(self, x2, y2):
         self.point_bottom_right.update(x2, y2)
-        self.type = "permanent"
+        self.type = "person"
         self._update_based_on_points()
+
+    def change_type_to_person(self):
+        self.type = "person"
+
+    def change_type_to_car(self):
+        self.type = "car"
 
     def move(self, dx, dy):
         x_centre = self.centre.x + dx
@@ -88,6 +96,8 @@ class ObjectInformation:
         self.point_of_selection.update(x, y)
         self.selected = True
 
+    # unselect is not in a dictionary, delesect is, another option in uncheck
+    # http://english.stackexchange.com/questions/18465/unselect-or-deselect
     def unselect(self):
         self.selected = False
 
@@ -120,3 +130,30 @@ class ObjectInformation:
             result = True
 
         return result
+
+    def __choose_colour_and_width(self):
+        colour = (100, 100, 100)
+        width = 2
+
+        if self.selected:
+            colour = (0, 255, 0)
+            width = 3
+        elif self.type == "temporary":
+            colour = (0, 100, 255)
+            width = 2
+        elif self.type == "person":
+            colour = (0, 0, 255)
+            width = 2
+        elif self.type == "car":
+            colour = (255, 0, 0)
+            width = 2
+
+        return colour, width
+
+    def draw(self, img, font):
+
+        colour, width = self.__choose_colour_and_width()
+
+        cv2.putText(img, self.type, self.point_top_left.to_tuple(), font, 1, colour, 1)
+        cv2.rectangle(img, self.point_top_left.to_tuple(), self.point_bottom_right.to_tuple(), colour, width)
+
