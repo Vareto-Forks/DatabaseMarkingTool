@@ -3,6 +3,8 @@ __author__ = 'Amin'
 import cv2
 import numpy as np
 
+import pickle
+
 from ObjectInformation import ObjectInformation
 from MouseButton import MouseButton
 
@@ -21,22 +23,22 @@ objects_to_draw = []
 
 state = STATE.idle
 
-#previous_x = 0
-#previous_y = 0
+id_counter = 0
 
 
 # mouse callback function
 # left key is used for moving objects
 # right key is used for creating new objects
 def mouse_callback(event, x, y, flags, param):
-    global current_object, new_object, objects_to_draw, right_button, left_button
+    global current_object, new_object, objects_to_draw, right_button, left_button, id_counter
     #global state, previous_x, previous_y
 
     # right mouse button
     if event == cv2.EVENT_RBUTTONDOWN:
         right_button.callback_pressed(x, y)
         new_object = ObjectInformation()
-        new_object.init(x, y, x+1, y+1)
+        new_object.init(x, y, x+1, y+1, id_counter)
+        id_counter += 1
         objects_to_draw.append(new_object)
     elif event == cv2.EVENT_RBUTTONUP:
         right_button.callback_released(x, y)
@@ -69,53 +71,20 @@ def mouse_callback(event, x, y, flags, param):
     elif event == cv2.EVENT_LBUTTONUP:
         left_button.callback_released(x, y)
 
-    # if state == STATE.idle:
-    #
-    #     if event == cv2.EVENT_LBUTTONDOWN:
-    #
-    #         is_clicked_inside = False
-    #         for object_to_draw in objects_to_draw:
-    #             if object_to_draw.check_if_inside(x, y):
-    #                 is_clicked_inside = True
-    #                 break
-    #
-    #         if is_clicked_inside:
-    #             current_object = object_to_draw
-    #             current_object.selected = True
-    #             previous_x = x
-    #             previous_y = y
-    #             state = STATE.left_clicked_inside
-    #         else:
-    #             current_object = ObjectInformation()
-    #             current_object.init(x, y, x+1, y+1)
-    #             objects_to_draw.append(current_object)
-    #             state = STATE.left_clicked_outside
-    #
-    # elif state == STATE.left_clicked_outside:
-    #
-    #     if event == cv2.EVENT_LBUTTONUP:
-    #         current_object.finish(x, y)
-    #         state = STATE.idle
-    #
-    #     elif event == cv2.EVENT_MOUSEMOVE:
-    #         current_object.resize(x, y)
-    #
-    # elif state == STATE.left_clicked_inside:
-    #     if event == cv2.EVENT_LBUTTONUP:
-    #         current_object.selected = False
-    #         state = STATE.idle
-    #
-    #     elif event == cv2.EVENT_MOUSEMOVE:
-    #         dx = (x-previous_x)
-    #         dy = (y-previous_y)
-    #         current_object.move(dx, dy)
-    #         previous_x = x
-    #         previous_y = y
-    #
-    # else:
-    #     pass
+
+from os import listdir
+from os.path import isfile, join
+
 
 if __name__ == "__main__":
+
+    path_to_decription = "description/processed_1/"
+
+    path_to_images = "datasets/processed_1/"
+    files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
+    image_counter = 0
+
+    font = cv2.FONT_HERSHEY_SIMPLEX
 
     window_name = "image"
 
@@ -123,9 +92,8 @@ if __name__ == "__main__":
     cv2.setMouseCallback(window_name, mouse_callback)
 
     #img = cv2.imread("Desert.jpg", cv2.IMREAD_COLOR)
-    img_original = np.zeros((512, 512, 3), np.uint8)
-
-    font = cv2.FONT_HERSHEY_SIMPLEX
+    #img_original = np.zeros((512, 512, 3), np.uint8)
+    img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
 
     key = 0
     while key != 27:
@@ -181,6 +149,29 @@ if __name__ == "__main__":
 
             elif key == ord('4'):
                 current_object.change_type_to_car()
+
+            elif key == ord('5'):
+                current_object.change_type_to_hidden()
+
+        if key == ord('m'):
+            image_counter += 1
+            img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
+
+        if key == ord('n'):
+            image_counter -= 1
+            img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
+
+        if key == ord('p'):
+            file_to_save = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
+            print file_to_save
+            with open(file_to_save, "wb") as f:
+                pickle.dump(objects_to_draw, f)
+
+        if key == ord('o'):
+            file_to_open = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
+            with open(file_to_open, "rb") as f:
+                objects_to_draw = pickle.load(f)
+
 
 
         img_working = img_original.copy()

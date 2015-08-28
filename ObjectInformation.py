@@ -32,13 +32,16 @@ class ObjectInformation:
         self._update_based_on_points()
 
         self.type = "type"
+        self.id = 0
         #self.description = "person"
 
-    def init(self, x1, y1, x2, y2):
+    def init(self, x1, y1, x2, y2, id):
         self.point_top_left.update(x1, y1)
         self.point_bottom_right.update(x2, y2)
-        self.type = "temporary"
         self._update_based_on_points()
+
+        self.id = id
+        self.type = "temporary"
 
     def resize(self, x2, y2):
         self.point_bottom_right.update(x2, y2)
@@ -65,6 +68,9 @@ class ObjectInformation:
 
     def change_type_to_car(self):
         self.type = "car"
+
+    def change_type_to_hidden(self):
+        self.type = "hidden"
 
     def move(self, dx, dy):
         x_centre = self.centre.x + dx
@@ -147,6 +153,9 @@ class ObjectInformation:
         elif self.type == "car":
             colour = (255, 0, 0)
             width = 2
+        elif self.type == "hidden":
+            colour = (100, 100, 100)
+            width = 1
 
         return colour, width
 
@@ -154,6 +163,12 @@ class ObjectInformation:
 
         colour, width = self.__choose_colour_and_width()
 
-        cv2.putText(img, self.type, self.point_top_left.to_tuple(), font, 1, colour, 1)
+        cv2.putText(img, self.type + " " + str(self.id), self.point_top_left.to_tuple(), font, 1, colour, 1)
+
+        centre_x1 = int(self.centre.x - 3)
+        centre_y1 = int(self.centre.y + 3)
+        centre_x2 = int(self.centre.x + 3)
+        centre_y2 = int(self.centre.y - 3)
+        cv2.rectangle(img, (centre_x1, centre_y1), (centre_x2, centre_y2), colour, -1)
         cv2.rectangle(img, self.point_top_left.to_tuple(), self.point_bottom_right.to_tuple(), colour, width)
 
