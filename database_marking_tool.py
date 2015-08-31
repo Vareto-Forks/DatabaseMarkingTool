@@ -30,15 +30,14 @@ id_counter = 0
 # left key is used for moving objects
 # right key is used for creating new objects
 def mouse_callback(event, x, y, flags, param):
-    global current_object, new_object, objects_to_draw, right_button, left_button, id_counter
-    #global state, previous_x, previous_y
+    global current_object, new_object, objects_to_draw, right_button, left_button
 
     # right mouse button
     if event == cv2.EVENT_RBUTTONDOWN:
+        print x, y
         right_button.callback_pressed(x, y)
         new_object = ObjectInformation()
-        new_object.init(x, y, x+1, y+1, id_counter)
-        id_counter += 1
+        new_object.init(x, y, x+1, y+1, len(objects_to_draw))
         objects_to_draw.append(new_object)
     elif event == cv2.EVENT_RBUTTONUP:
         right_button.callback_released(x, y)
@@ -73,16 +72,19 @@ def mouse_callback(event, x, y, flags, param):
 
 
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, exists
 
 
 if __name__ == "__main__":
 
-    path_to_decription = "description/processed_1/"
+    dataset_name = "processed_5"
 
-    path_to_images = "datasets/processed_1/"
+    path_to_decription = "description/" + dataset_name + "/"
+
+    path_to_images = "datasets/" + dataset_name + "/"
     files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
     image_counter = 0
+    flag_auto_load = False
 
     font = cv2.FONT_HERSHEY_SIMPLEX
 
@@ -94,6 +96,9 @@ if __name__ == "__main__":
     #img = cv2.imread("Desert.jpg", cv2.IMREAD_COLOR)
     #img_original = np.zeros((512, 512, 3), np.uint8)
     img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
+    scale_x = 0.8
+    scale_y = 0.8
+    img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
 
     key = 0
     while key != 27:
@@ -155,11 +160,25 @@ if __name__ == "__main__":
 
         if key == ord('m'):
             image_counter += 1
+            print "Image number: " + str(image_counter)
             img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
+            img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
+            if flag_auto_load:
+                file_to_open = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
+                if exists(file_to_open):
+                    with open(file_to_open, "rb") as f:
+                        objects_to_draw = pickle.load(f)
 
         if key == ord('n'):
             image_counter -= 1
+            print "Image number: " + str(image_counter)
             img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
+            img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
+            if flag_auto_load:
+                file_to_open = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
+                if exists(file_to_open):
+                    with open(file_to_open, "rb") as f:
+                        objects_to_draw = pickle.load(f)
 
         if key == ord('p'):
             file_to_save = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
@@ -169,12 +188,19 @@ if __name__ == "__main__":
 
         if key == ord('o'):
             file_to_open = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
-            with open(file_to_open, "rb") as f:
-                objects_to_draw = pickle.load(f)
+            if exists(file_to_open):
+                with open(file_to_open, "rb") as f:
+                    objects_to_draw = pickle.load(f)
+
+        if key == ord('l'):
+            flag_auto_load = not flag_auto_load
+            print "Auto load state: " + str(flag_auto_load)
+
+        if key == ord('k'):
+            objects_to_draw = []
 
 
-
-        img_working = img_original.copy()
+        img_working = img_original_resized.copy()
         # draw all stored objects
         for object_to_draw in objects_to_draw:
             object_to_draw.draw(img_working, font)
