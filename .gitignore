@@ -4,6 +4,9 @@ datasets/
 # PyCharm ignore
 .idea/
 
+# project specific
+description/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

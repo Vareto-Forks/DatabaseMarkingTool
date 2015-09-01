@@ -3,6 +3,9 @@ __author__ = 'Amin'
 import cv2
 import numpy as np
 
+from os import listdir
+from os.path import isfile, join, exists
+
 import pickle
 
 from ObjectInformation import ObjectInformation
@@ -70,16 +73,11 @@ def mouse_callback(event, x, y, flags, param):
     elif event == cv2.EVENT_LBUTTONUP:
         left_button.callback_released(x, y)
 
-
-from os import listdir
-from os.path import isfile, join, exists
-
-
 if __name__ == "__main__":
 
     dataset_name = "processed_5"
 
-    path_to_decription = "description/" + dataset_name + "/"
+    path_to_description = "description/" + dataset_name + "/"
 
     path_to_images = "datasets/" + dataset_name + "/"
     files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
@@ -164,7 +162,7 @@ if __name__ == "__main__":
             img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
             img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
             if flag_auto_load:
-                file_to_open = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
+                file_to_open = path_to_description + str(image_counter) + "_" + files[image_counter] + ".pickle"
                 if exists(file_to_open):
                     with open(file_to_open, "rb") as f:
                         objects_to_draw = pickle.load(f)
@@ -175,19 +173,19 @@ if __name__ == "__main__":
             img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
             img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
             if flag_auto_load:
-                file_to_open = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
+                file_to_open = path_to_description + str(image_counter) + "_" + files[image_counter] + ".pickle"
                 if exists(file_to_open):
                     with open(file_to_open, "rb") as f:
                         objects_to_draw = pickle.load(f)
 
         if key == ord('p'):
-            file_to_save = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
+            file_to_save = path_to_description + str(image_counter) + "_" + files[image_counter] + ".pickle"
             print file_to_save
             with open(file_to_save, "wb") as f:
                 pickle.dump(objects_to_draw, f)
 
         if key == ord('o'):
-            file_to_open = path_to_decription + str(image_counter) + "_" + files[image_counter] + ".pickle"
+            file_to_open = path_to_description + str(image_counter) + "_" + files[image_counter] + ".pickle"
             if exists(file_to_open):
                 with open(file_to_open, "rb") as f:
                     objects_to_draw = pickle.load(f)
