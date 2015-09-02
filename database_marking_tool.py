@@ -10,6 +10,7 @@ import pickle
 from ObjectInformation import ObjectInformation
 from MouseButton import MouseButton
 
+# GLOBALS - required for OpenCV mouse callback
 right_button = MouseButton()
 left_button = MouseButton()
 
@@ -88,34 +89,52 @@ def select_object_below(objects):
 
 if __name__ == "__main__":
 
-    dataset_name = "processed_6"
+    # IMPORTANT - PARAMETERS
+    # there is a problem with images that are bigger than screen resolution
+    # they are resized by this parameters
+    # change to 1.0 if not resizing is needed
+    scale_x = 0.8
+    scale_y = 0.8
+
+    # choose the part of the image that should be used
+    # put (0, 0) and (width, height) if you want whole image
+    roi_top_left_x = 0
+    roi_top_left_y = 0
+    roi_bottom_right_x = 1600 * scale_x
+    roi_bottom_right_y = 1200 * scale_y
+
+    # set the directories (relative or not) where the dataset is and where the descriptions should be placed
+    # all of this directories have to exist
+    dataset_name = "processed_5"
     path_to_description = "description/" + dataset_name + "/"
     path_to_images = "datasets/" + dataset_name + "/"
 
-    files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
+    # END OF PARAMETERS LIST
 
+    # CONSTANTS
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    window_name = "image"
+
+    # INITIALIZATION
     image_counter = 0
     flag_auto_load = False
 
-    font = cv2.FONT_HERSHEY_SIMPLEX
-
-    window_name = "image"
+    files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
 
     cv2.namedWindow(window_name)
     cv2.setMouseCallback(window_name, mouse_callback)
-
-    scale_x = 0.8
-    scale_y = 0.8
 
     #img = cv2.imread("Desert.jpg", cv2.IMREAD_COLOR)
     #img_original = np.zeros((512, 512, 3), np.uint8)
     img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
     img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
+    img_original_resized_roi = img_original_resized[roi_top_left_y:roi_bottom_right_y, roi_top_left_x:roi_bottom_right_x]
 
     key = 0
     while key != 27:
 
         if current_object is not None:
+            # move selected object
             if key == ord('w'):
                 current_object.move(0, -1)
             elif key == ord('s'):
@@ -124,6 +143,7 @@ if __name__ == "__main__":
                 current_object.move(-1, 0)
             elif key == ord('d'):
                 current_object.move(1, 0)
+            # resize selected object
             elif key == ord('q'):
                 current_object.increase_size(top=-1)
             elif key == ord('z'):
@@ -141,55 +161,67 @@ if __name__ == "__main__":
             elif key == ord('C'):
                 current_object.increase_size(right=-1)
 
+            # choose object below
             elif key == ord('1'):
                 current_object = select_object_below(objects_to_draw)
 
+            # delete selected object
             elif key == ord('2'):
                 objects_to_draw.remove(current_object)
 
+            # change type to person
             elif key == ord('3'):
                 current_object.change_type_to_person()
 
+            # change type to car
             elif key == ord('4'):
                 current_object.change_type_to_car()
 
+            # change type to hidden
             elif key == ord('5'):
                 current_object.change_type_to_hidden()
 
+        # next image
         if key == ord('m'):
             image_counter += 1
             print "Image number: " + str(image_counter)
             img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
             img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
+            img_original_resized_roi = img_original_resized[roi_top_left_y:roi_bottom_right_y, roi_top_left_x:roi_bottom_right_x]
             if flag_auto_load:
                 file_to_open = path_to_description + str(image_counter) + "_" + files[image_counter] + ".pickle"
                 if exists(file_to_open):
                     with open(file_to_open, "rb") as f:
                         objects_to_draw = pickle.load(f)
 
+        # previous image
         elif key == ord('n'):
             image_counter -= 1
             print "Image number: " + str(image_counter)
             img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
             img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
+            img_original_resized_roi = img_original_resized[roi_top_left_y:roi_bottom_right_y, roi_top_left_x:roi_bottom_right_x]
             if flag_auto_load:
                 file_to_open = path_to_description + str(image_counter) + "_" + files[image_counter] + ".pickle"
                 if exists(file_to_open):
                     with open(file_to_open, "rb") as f:
                         objects_to_draw = pickle.load(f)
 
+        # save the descriptioon
         elif key == ord('p'):
             file_to_save = path_to_description + str(image_counter) + "_" + files[image_counter] + ".pickle"
             print file_to_save
             with open(file_to_save, "wb") as f:
                 pickle.dump(objects_to_draw, f)
 
+        # load the description
         elif key == ord('o'):
             file_to_open = path_to_description + str(image_counter) + "_" + files[image_counter] + ".pickle"
             if exists(file_to_open):
                 with open(file_to_open, "rb") as f:
                     objects_to_draw = pickle.load(f)
 
+        # toggle auto load of description (invoked when choosing next image)
         elif key == ord('l'):
             flag_auto_load = not flag_auto_load
             print "Auto load state: " + str(flag_auto_load)
@@ -198,7 +230,7 @@ if __name__ == "__main__":
         elif key == ord('k'):
             objects_to_draw = []
 
-        img_working = img_original_resized.copy()
+        img_working = img_original_resized_roi.copy()
         # draw all stored objects
         for object_to_draw in objects_to_draw:
             object_to_draw.draw(img_working, font)
