@@ -10,7 +10,7 @@ from ObjectInformation import ObjectInformation
 
 if __name__ == "__main__":
 
-    dataset_name = "processed_5"
+    dataset_name = "processed_6"
     path_to_description = "description/" + dataset_name + "/"
     path_to_images = "datasets/" + dataset_name + "/"
 
@@ -18,9 +18,10 @@ if __name__ == "__main__":
 
     files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
 
-    img_original = cv2.imread(path_to_images + files[0], cv2.IMREAD_COLOR)
     scale_x = 0.8
     scale_y = 0.8
+
+    img_original = cv2.imread(path_to_images + files[0], cv2.IMREAD_COLOR)
     img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
 
     height, width, layers = img_original_resized.shape

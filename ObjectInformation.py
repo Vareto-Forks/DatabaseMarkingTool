@@ -14,6 +14,10 @@ class Point:
         self.x = x
         self.y = y
 
+    def change(self, dx=0, dy=0):
+        self.x += dx
+        self.y += dy
+
     def to_tuple(self):
         return self.x, self.y
 
@@ -23,17 +27,16 @@ class ObjectInformation:
         self.centre = Point()
         self.width = 0
         self.height = 0
+        self.point_top_left = Point()
+        self.point_bottom_right = Point()
 
         self.selected = False
         self.point_of_selection = Point()
 
-        self.point_top_left = Point()
-        self.point_bottom_right = Point()
         self._update_based_on_points()
 
         self.type = "type"
         self.id = 0
-        #self.description = "person"
 
     def init(self, x1, y1, x2, y2, id):
         self.point_top_left.update(x1, y1)
@@ -60,7 +63,7 @@ class ObjectInformation:
 
     def finish(self, x2, y2):
         self.point_bottom_right.update(x2, y2)
-        self.type = "person"
+        self.change_type_to_person()
         self._update_based_on_points()
 
     def change_type_to_person(self):
@@ -73,9 +76,7 @@ class ObjectInformation:
         self.type = "hidden"
 
     def move(self, dx, dy):
-        x_centre = self.centre.x + dx
-        y_centre = self.centre.y + dy
-        self.centre.update(x_centre, y_centre)
+        self.centre.change(dx, dy)
         self._update_base_on_centre_and_size()
 
     def _update_based_on_points(self):
@@ -170,5 +171,5 @@ class ObjectInformation:
         centre_x2 = int(self.centre.x + 3)
         centre_y2 = int(self.centre.y - 3)
         cv2.rectangle(img, (centre_x1, centre_y1), (centre_x2, centre_y2), colour, -1)
-        cv2.rectangle(img, self.point_top_left.to_tuple(), self.point_bottom_right.to_tuple(), colour, width)
 
+        cv2.rectangle(img, self.point_top_left.to_tuple(), self.point_bottom_right.to_tuple(), colour, width)

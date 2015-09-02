@@ -1,11 +1,13 @@
 # Amin
-# local files with dataset
-datasets/
 # PyCharm ignore
 .idea/
 
 # project specific
+# local files
+datasets/
 description/
+*.avi
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
