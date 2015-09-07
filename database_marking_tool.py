@@ -93,19 +93,19 @@ if __name__ == "__main__":
     # there is a problem with images that are bigger than screen resolution
     # they are resized by this parameters
     # change to 1.0 if not resizing is needed
-    scale_x = 0.8
-    scale_y = 0.8
+    scale_x = 1.0#0.8
+    scale_y = 1.0#0.8
 
     # choose the part of the image that should be used
     # put (0, 0) and (width, height) if you want whole image
-    roi_top_left_x = 0
-    roi_top_left_y = 0
-    roi_bottom_right_x = 1600 * scale_x
-    roi_bottom_right_y = 1200 * scale_y
+    roi_top_left_x = 698
+    roi_top_left_y = 650
+    roi_bottom_right_x = 1375 * scale_x
+    roi_bottom_right_y = 1150 * scale_y
 
     # set the directories (relative or not) where the dataset is and where the descriptions should be placed
     # all of this directories have to exist
-    dataset_name = "processed_5"
+    dataset_name = "dataset_7"
     path_to_description = "description/" + dataset_name + "/"
     path_to_images = "datasets/" + dataset_name + "/"
 
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     window_name = "image"
 
     # INITIALIZATION
-    image_counter = 0
+    image_counter = 950#0
     flag_auto_load = False
 
     files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]

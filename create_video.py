@@ -10,7 +10,7 @@ from ObjectInformation import ObjectInformation
 
 if __name__ == "__main__":
 
-    dataset_name = "processed_6"
+    dataset_name = "dataset_7" #"processed_6"
     path_to_description = "description/" + dataset_name + "/"
     path_to_images = "datasets/" + dataset_name + "/"
 
@@ -18,6 +18,7 @@ if __name__ == "__main__":
 
     files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
 
+    # TODO
     scale_x = 0.8
     scale_y = 0.8
 
