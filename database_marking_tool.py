@@ -10,6 +10,8 @@ import pickle
 from ObjectInformation import ObjectInformation
 from MouseButton import MouseButton
 
+import copy
+
 # GLOBALS - required for OpenCV mouse callback
 right_button = MouseButton()
 left_button = MouseButton()
@@ -93,19 +95,19 @@ if __name__ == "__main__":
     # there is a problem with images that are bigger than screen resolution
     # they are resized by this parameters
     # change to 1.0 if not resizing is needed
-    scale_x = 1.0#0.8
-    scale_y = 1.0#0.8
+    scale_x = 0.8#1.0#0.8
+    scale_y = 0.8#1.0#0.8
 
     # choose the part of the image that should be used
     # put (0, 0) and (width, height) if you want whole image
-    roi_top_left_x = 698
-    roi_top_left_y = 650
-    roi_bottom_right_x = 1375 * scale_x
-    roi_bottom_right_y = 1150 * scale_y
+    roi_top_left_x = 0#698
+    roi_top_left_y = 0#650
+    roi_bottom_right_x = 1600 * scale_x#1375
+    roi_bottom_right_y = 1200 * scale_y#1150
 
     # set the directories (relative or not) where the dataset is and where the descriptions should be placed
     # all of this directories have to exist
-    dataset_name = "dataset_7"
+    dataset_name = "processed_6"#"dataset_7"
     path_to_description = "description/" + dataset_name + "/"
     path_to_images = "datasets/" + dataset_name + "/"
 
@@ -116,7 +118,7 @@ if __name__ == "__main__":
     window_name = "image"
 
     # INITIALIZATION
-    image_counter = 950#0
+    image_counter = 0#900#0
     flag_auto_load = False
 
     files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
@@ -129,6 +131,9 @@ if __name__ == "__main__":
     img_original = cv2.imread(path_to_images + files[image_counter], cv2.IMREAD_COLOR)
     img_original_resized = cv2.resize(img_original, (0, 0), None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_NEAREST)
     img_original_resized_roi = img_original_resized[roi_top_left_y:roi_bottom_right_y, roi_top_left_x:roi_bottom_right_x]
+
+    object_6_to_copy = None
+    object_9_to_copy = None
 
     key = 0
     while key != 27:
@@ -181,6 +186,13 @@ if __name__ == "__main__":
             elif key == ord('5'):
                 current_object.change_type_to_hidden()
 
+            elif key == ord('6'):
+                current_object.change_type_to_cyclist()
+
+            elif key == ord('7'):
+                current_object.change_id(9)
+
+
         # next image
         if key == ord('m'):
             image_counter += 1
@@ -229,6 +241,15 @@ if __name__ == "__main__":
         # remove all created objects
         elif key == ord('k'):
             objects_to_draw = []
+
+        elif key == ord('v'):
+            object_6_to_copy = copy.deepcopy(next(x for x in objects_to_draw if x.id == 6))
+            object_9_to_copy = copy.deepcopy(next(x for x in objects_to_draw if x.id == 9))
+
+        elif key == ord('f'):
+            objects_to_draw.remove(next(x for x in objects_to_draw if x.id == 6))
+            objects_to_draw.append(object_6_to_copy)
+            objects_to_draw.append(object_9_to_copy)
 
         img_working = img_original_resized_roi.copy()
         # draw all stored objects

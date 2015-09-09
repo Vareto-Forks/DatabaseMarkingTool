@@ -38,12 +38,12 @@ class ObjectInformation:
         self.type = "type"
         self.id = 0
 
-    def init(self, x1, y1, x2, y2, id):
+    def init(self, x1, y1, x2, y2, _id):
         self.point_top_left.update(x1, y1)
         self.point_bottom_right.update(x2, y2)
         self._update_based_on_points()
 
-        self.id = id
+        self.id = _id
         self.type = "temporary"
 
     def resize(self, x2, y2):
@@ -72,8 +72,14 @@ class ObjectInformation:
     def change_type_to_car(self):
         self.type = "car"
 
+    def change_type_to_cyclist(self):
+        self.type = "cyclist"
+
     def change_type_to_hidden(self):
         self.type = "hidden"
+
+    def change_id(self, new_id):
+        self.id = new_id
 
     def move(self, dx, dy):
         self.centre.change(dx, dy)
@@ -154,6 +160,9 @@ class ObjectInformation:
         elif self.type == "car":
             colour = (255, 0, 0)
             width = 2
+        elif self.type == "cyclist":
+            colour = (40, 160, 40)
+            width = 3
         elif self.type == "hidden":
             colour = (100, 100, 100)
             width = 1
