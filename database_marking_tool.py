@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
     # set the directories (relative or not) where the dataset is and where the descriptions should be placed
     # all of this directories have to exist
-    dataset_name = "processed_6"#"dataset_7"
+    dataset_name = "processed_5"#"dataset_7"
     path_to_description = "description/" + dataset_name + "/"
     path_to_images = "datasets/" + dataset_name + "/"
 
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     window_name = "image"
 
     # INITIALIZATION
-    image_counter = 0#900#0
+    image_counter = 240#900#0
     flag_auto_load = False
 
     files = [f for f in listdir(path_to_images) if isfile(join(path_to_images, f))]
@@ -250,6 +250,9 @@ if __name__ == "__main__":
             objects_to_draw.remove(next(x for x in objects_to_draw if x.id == 6))
             objects_to_draw.append(object_6_to_copy)
             objects_to_draw.append(object_9_to_copy)
+
+        elif key == ord('r'):
+            cv2.imwrite("sample_image.png", img_working)
 
         img_working = img_original_resized_roi.copy()
         # draw all stored objects
