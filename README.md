@@ -1,6 +1,6 @@
 # database_marking_tool
 
-Simple tool for annotating images. It was used to create PUT Surveillance database, which can be found at:
+Pyton tool for annotating images. It was used to create PUT Surveillance database, which can be found at:
 http://www.vision.put.poznan.pl/surv_database
 
 ## Acknowledgment
