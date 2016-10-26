@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html data-adblockkey="MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALquDFETXRn0Hr05fUP7EJT77xYnPmRbpMy4vk8KYiHnkNpednjOANJcaXDXcKQJN0nXKZJL7TciJD8AoHXK158CAwEAAQ==_NZDQ6JPIzfAAUFj0rts1Kf0EVSNol3as7emuPGT0P06OyboyqaohDrBmjSjt3L7tiN4b/p++u9cH7CmgaTS/Dg==" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>exposay.com</title>
+<script src="http://www.google.com/adsense/domains/caf.js" type="text/javascript" ></script>
+<link href="http://d173uz8cg5fd80.cloudfront.net/themes/assets/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="http://d173uz8cg5fd80.cloudfront.net/themes/grimmingCaf3Bold/style.css" rel="stylesheet" type="text/css" media="screen" />
+<style type="text/css">
+#linktitle a {
+text-decoration: underline;
+}
+#showurl a {
+text-decoration: underline;
+}
+</style>
+</head>
+<body id="oneclick" style="visibility:hidden">
+<div id="content">
+<div id="header">
+<h1>exposay.com</h1>
+<div id="searchboxHolder">
+<div id="searchbox"></div>
+</div>
+</div>
+<div id="rsHolder">
+<div id="rs"></div>
+</div>
+<div id="adsHolder" class="adsHolder">
+<div id="ads"></div>
+</div>
+<div class="fix"></div>
+</div>
+<div id="footer"><script type="text/javascript">function showImprint(){var imprintwnd = window.open('','pcrew_imprint','width=640,height=480,left=200,top=200,menubar=no,status=yes,toolbar=no');imprintwnd.document.writeln("");imprintwnd.document.close();}function showPolicy(){policywnd = window.open('http://www.parkingcrew.net/privacy2.html','pcrew_policy','width=890,height=330,left=200,top=200,menubar=no,status=yes,toolbar=no');policywnd.focus();}</script>
+2014 Copyright.  All Rights Reserved. <br/><br/>
+The Sponsored Listings displayed above are served automatically by a third party. Neither the service provider nor the domain owner maintain any relationship with the advertisers. In case of trademark issues please contact the domain owner directly (contact information can be found in whois).
+<br/><br/>
+<a href="javascript:void(0);" onClick="showPolicy();">Privacy Policy</a>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-48689684-1']);
+_gaq.push(['_setDomainName', 'auto']);
+_gaq.push(['_setAllowLinker', false]);
+_gaq.push(['_setCustomVar', 1, 'Theme', 'Grimming', 1]);
+_gaq.push(['_setCustomVar', 2, 'Theme Type', 'one', 3]);
+_gaq.push(['_setCustomVar', 3, 'Category ID', '0', 3]);
+_gaq.push(['_setCustomVar', 4, 'Colorscheme', '', 3]);
+_gaq.push(['_setCustomVar', 5, 'domty', 'ascii', 3]);
+_gaq.push(['_gat._anonymizeIp']);
+_gaq.push(['_trackPageview']);
+ (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })(); 
+</script>
+<!-- --></div>
+<script type="text/javascript" language="JavaScript">
+var adblock1 = {
+	'colorBackground' : 'transparent',
+	'container' : 'ads',
+	'type' : 'textads',
+	'linkTarget' : '_blank',
+	'colorBackground' : 'transparent',
+	'adIconUrl' : 'http://afs.googleusercontent.com/dp-teaminternet/the_grimmi.png',
+	'adIconWidth' : 19,
+	'adIconHeight' : 13,
+	'adIconSpacingAbove' : 6,
+	'adIconSpacingAfter' : 10,
+	'fontFamily' : 'Arial',
+	'fontSizeTitle' : 22,
+	'fontSizeDescription' : 16,
+	'fontSizeDomainLink' : 16,
+	'lineHeightTitle' : 24,
+	'lineHeightDescription' : 17,
+	'lineHeightDomainLink' : 17,
+	'colorTitleLink' : '#36f',
+	'colorText' : '#000',
+	'lines' : 3,
+	'colorDomainLink' : '#090',
+	'adLoadedCallback' : function(shown, param2) {},
+	'number' : 5,
+	'adjustableLineHeight' : 60,
+	'titleBold': false,
+	'rolloverLinkColor' : '#e50b7c',
+	'colorAttribution' : '#cdcdcd',
+	'adjustableLineHeight' : 14,
+	'verticalSpacing' : 15,
+	'lineHeightDescription' : 30,
+	'colorAttribution' : '#c1c1c1',
+	'width' : '640px',
+	'rolloverLinkBold':true
+};
+
+var searchboxBlock = {
+	'container' : 'searchbox',
+	'type' : 'searchbox',
+	'fontSizeSearchInput' : 12,
+	'fontSizeSearchButton' : 10,
+	'fontSizeSearchButton' : 13,
+	'widthSearchInput' : 160
+};
+
+var rsblock = {
+	'container' : 'rs',
+	'type' : 'relatedsearch',
+	'number' : 10,
+	'fontSizeTitle' : 17,
+	'colorTitleLink' : '#3366FF',
+	'colorBackground' : 'transparent',
+	'fontSizeAttribution' : 11,
+	'colorAttribution' : '#cdcdcd',
+	'lineHeightTitle' : 20,
+	'lineHeightDescription' : 16,
+	'lineHeightDomainLink' : 16,
+	'noTitleUnderline': true,
+	'rolloverLinkColor' : '#e50b7c',
+	'verticalSpacing' : 5  
+};
+
+var tcblock = {
+	'container' : 'tc',
+	'type' : 'relatedsearch',
+	'number' : 10,
+	'fontSizeTitle' : 20,
+	'colorBackground' : 'transparent',
+	'fontSizeAttribution' : 14,
+	'lineHeightTitle' : 28,
+	'noTitleUnderline': true,
+	'rolloverLinkColor' : '#e50b7c',
+	'titleBold': true,
+	'width' : '460px'
+};
+</script>
+<script type="text/javascript" language="JavaScript">if (top.location!=location){top.location.href=document.location.href;}</script><script type='text/javascript' language='JavaScript'>var isAdult=false;var xbase='547e66ddbb6a12c7208f1a03';var sbtext='Search';var xt_auto_load=0;var ads='',pop_cats='';var rxid='50691024';var uniqueTrackingID='MTQxNzU3MDAxMy43OTIzOmQ2N2JmZjM0MjBmZjQ0YWYxMmMyZjc0NjA1MWY5YmI0ZGY3ZTFkMTk1MzZlYjBjNDdhMWYxMjIwZDUzNjg1YzA6NTQ3ZTY2ZGRjMTc1Yw==';var search='';var is_afs=false;var country='us';var themedata='fEdyaW1taW5nfHxiNGY4NXx8YnVja2V0MDk0fHx8NTA2OTEwMjR8fDU0N2U2NmRkYzA0OTd8fHwxNDE3NTcwMDEzLjkxNDJ8YjY0YTg3NmMzZTcxMDAxOWIxMWY5MDkzNzYyMTE4ZTJlN2I4NTgxYnx8fHx8MXx8fDB8fHx8fHx8fHx8fHwyMGM4MDNiODUyMmUyNDJiYWMxYjllYWQ4MDA2YmIzYjM5MjBhMDQz';var domain='exposay.com';var scriptPath='';var adtest='off';var useFallbackTerms=false;</script><script>if (!window.JSON) { document.write("<script src='http://d173uz8cg5fd80.cloudfront.net/scripts/json3.min.js' type='text/javascript' language='JavaScript'><\/scr"+"ipt>"); }</script>
+<script src='http://d173uz8cg5fd80.cloudfront.net/scripts/js3caf.js' type='text/javascript' language='JavaScript'></script>
+<script type='text/javascript' language='JavaScript'>x(pageOptions,{resultsPageBaseUrl: 'http://www.exposay.com/?ts=fEdyaW1taW5nfHxiNGY4NXx8YnVja2V0MDk0fHx8NTA2OTEwMjR8fDU0N2U2NmRkYzA0OTd8fHwxNDE3NTcwMDEzLjkxNjN8MTQwN2JjOTI5OWZiOGFkMmNjN2E0MThmMmMwODU0NGZjYmNmZWY0Ynx8fHx8MXx8fDB8NTQ3ZTY2ZGRiYjZhMTJjNzIwOGYxYTAzfHx8fHx8fHx8fHwyMGM4MDNiODUyMmUyNDJiYWMxYjllYWQ4MDA2YmIzYjM5MjBhMDQz', hl: 'en', kw: '', terms: [].join(','),  channel: 'bucket094', pubId: 'dp-teaminternet02_3ph', adtest: 'off', clicktrackUrl: 'http://parkingcrew.net/track.php?click=caf&domain=exposay.com&rxid=50691024&uid=MTQxNzU3MDAxMy43OTIzOmQ2N2JmZjM0MjBmZjQ0YWYxMmMyZjc0NjA1MWY5YmI0ZGY3ZTFkMTk1MzZlYjBjNDdhMWYxMjIwZDUzNjg1YzA6NTQ3ZTY2ZGRjMTc1Yw%3D%3D&ts=fEdyaW1taW5nfHxiNGY4NXx8YnVja2V0MDk0fHx8NTA2OTEwMjR8fDU0N2U2NmRkYzA0OTd8fHwxNDE3NTcwMDEzLjkxNjN8MTQwN2JjOTI5OWZiOGFkMmNjN2E0MThmMmMwODU0NGZjYmNmZWY0Ynx8fHx8MXx8fDB8NTQ3ZTY2ZGRiYjZhMTJjNzIwOGYxYTAzfHx8fHx8fHx8fHwyMGM4MDNiODUyMmUyNDJiYWMxYjllYWQ4MDA2YmIzYjM5MjBhMDQz&adtest=off'});</script><script src='http://d173uz8cg5fd80.cloudfront.net/scripts/tier2caf.js' type='text/javascript' language='JavaScript'></script>
+<script type="text/javascript" language="JavaScript" src="/scripts/feedmeCaf.php?q=&ip=128.208.5.45&max=10&hl=us&d=exposay.com&ron=0&adult=0"></script><script type='text/javascript'>var useTier2 = true; function loadFeed(){return tier2.apply(this, arguments);};</script>
+<script type='text/javascript' language='JavaScript'>if(typeof x == 'undefined' || typeof pageOptions == 'undefined') { var links = document.head.getElementsByTagName('link'); for(var i = 0; i < links.length; i++) { links[i].href = links[i].href.replace('http://d173uz8cg5fd80.cloudfront.net', 'http://parkingcrew.net/assets'); } document.body.style.visibility = 'visible'; document.getElementById('searchHolder').style.visibility = 'hidden'; }</script>
+<script type="text/javascript" language="JavaScript">new loadFeed(pageOptions, adblock1, searchboxBlock, rsblock);</script>
+</body>
+</html>
